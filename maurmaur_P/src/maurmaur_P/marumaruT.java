@@ -37,12 +37,10 @@ import java.util.*;
 public class marumaruT extends JFrame {
 	private Object textLog;
 	Font font = new Font("돋움", Font.BOLD, 18);
-	List<String> comicList0 = new ArrayList<String>();
 	List<String> comicList1 = new ArrayList<String>();
 	List<String> comicList2 = new ArrayList<String>();
 	List<String> comicList3 = new ArrayList<String>();
 	List<String> comicList4 = new ArrayList<String>();
-	int listNum = 0;
 	List<String> namae1 = new ArrayList<String>();
 	List<String> namae2 = new ArrayList<String>();
 	List<String> namae3 = new ArrayList<String>();
@@ -51,10 +49,11 @@ public class marumaruT extends JFrame {
 	List<String> path6 = new ArrayList<String>();
 	List<String> path7 = new ArrayList<String>();
 	List<String> path8 = new ArrayList<String>();
+	int listNum = 0;
 	String path2, namae;
 
 	marumaruT() {
-		setTitle("MaruMaru Downloader");
+		setTitle("MaruMaru Downloader 1.4");
 
 		Container c = getContentPane();
 		c.setLayout(null);
@@ -120,6 +119,7 @@ public class marumaruT extends JFrame {
 					namae = e1.text();
 
 					if (url2.contains("http://")) { // "a"에서 만화의 링크를 골라내는 if
+
 						path2 = path + "\\" + namae;
 						File file2 = new File(path2);
 						if (!file2.exists()) {
@@ -131,7 +131,7 @@ public class marumaruT extends JFrame {
 							namae1.add(namae);
 							path5.add(path2);
 							listNum++;
-						} else if (listNum % 4 == 3) {
+						} else if (listNum % 4 == 1) {
 							comicList2.add(url2);
 							namae2.add(namae);
 							path6.add(path2);
@@ -141,7 +141,7 @@ public class marumaruT extends JFrame {
 							namae3.add(namae);
 							path7.add(path2);
 							listNum++;
-						} else if (listNum % 4 == 1) {
+						} else if (listNum % 4 == 3) {
 							comicList4.add(url2);
 							namae4.add(namae);
 							path8.add(path2);
@@ -151,6 +151,11 @@ public class marumaruT extends JFrame {
 					} // if_A
 
 				} // for문
+
+				System.out.println("comicList1 = " + comicList1);
+				System.out.println("comicList2 = " + comicList2);
+				System.out.println("comicList3 = " + comicList3);
+				System.out.println("comicList4 = " + comicList4);
 
 				downloader d1 = new downloader(comicList1, path5, namae1, txtLog, "1번 Thread");
 				downloader d2 = new downloader(comicList2, path6, namae2, txtLog, "2번 Thread");
