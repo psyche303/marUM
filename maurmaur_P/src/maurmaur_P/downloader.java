@@ -17,6 +17,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
+
+import org.openqa.selenium.chrome.ChromeDriver;
 
 public class downloader implements Runnable {
 	private Object textLog;
@@ -43,7 +50,32 @@ public class downloader implements Runnable {
 			try {// 한 권의 img를 저장하는 try
 				Document doc2 = Jsoup.connect(comicList.get(i)).get();
 				Element element2 = doc2.select("div.article-gallery").get(0);
-				Elements img = element2.select("img");
+				Elements pw = element2.select("input");
+				if (pw != null) {
+					System.out.println(pw);
+					try {
+						System.setProperty("webdriver.chrome.driver", ".\\chromedriver.exe");
+						System.out.println(System.getProperty("webdriver.chrome.driver"));
+						WebDriver driver = new ChromeDriver();
+						System.out.println("Chrome is selected");
+						driver.get(comicList.get(i));
+						System.out.println(comicList.get(i)+"is selected");
+						WebElement sElement = driver.findElement(By.name("pass"));
+						System.out.println("\"pass\" is found");
+						sElement.click();
+						sElement.clear();
+						sElement.sendKeys("qndxkr");
+						sElement.submit();
+						System.out.println("submit까지 완료");
+						System.out.println("Page title is : "+driver.getTitle());
+						
+						
+					}catch(WebDriverException sE) {
+						System.out.println("에러발생");
+					}
+				}
+				
+				Elements img = element2.select("img");				
 				int fileNum = 1;
 				for (Element e2 : img) {
 
