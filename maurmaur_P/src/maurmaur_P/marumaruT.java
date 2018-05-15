@@ -41,14 +41,17 @@ public class marumaruT extends JFrame {
 	List<String> comicList2 = new ArrayList<String>();
 	List<String> comicList3 = new ArrayList<String>();
 	List<String> comicList4 = new ArrayList<String>();
+	List<String> comicList5 = new ArrayList<String>();
 	List<String> namae1 = new ArrayList<String>();
 	List<String> namae2 = new ArrayList<String>();
 	List<String> namae3 = new ArrayList<String>();
 	List<String> namae4 = new ArrayList<String>();
+	List<String> namae5 = new ArrayList<String>();
 	List<String> path5 = new ArrayList<String>();
 	List<String> path6 = new ArrayList<String>();
 	List<String> path7 = new ArrayList<String>();
 	List<String> path8 = new ArrayList<String>();
+	List<String> path9 = new ArrayList<String>();
 	int listNum = 0;
 	String path2, namae;
 
@@ -125,7 +128,9 @@ public class marumaruT extends JFrame {
 						if (!file2.exists()) {
 							file2.mkdirs();
 						}
-
+						comicList5.add(url2);
+						namae5.add(namae);
+						path9.add(path2);
 						if (listNum % 4 == 0) {
 							comicList1.add(url2);
 							namae1.add(namae);
@@ -156,21 +161,26 @@ public class marumaruT extends JFrame {
 				System.out.println("comicList2 = " + comicList2);
 				System.out.println("comicList3 = " + comicList3);
 				System.out.println("comicList4 = " + comicList4);
+				System.out.println("comicList5 = " + comicList5);
+				
+				test test1 = new test(comicList5, path9, namae5, txtLog, "test Thread");
+				Thread t5 = new Thread(test1);
+				t5.start();				
 
-				downloader d1 = new downloader(comicList1, path5, namae1, txtLog, "1번 Thread");
-				downloader d2 = new downloader(comicList2, path6, namae2, txtLog, "2번 Thread");
-				downloader d3 = new downloader(comicList3, path7, namae3, txtLog, "3번 Thread");
-				downloader d4 = new downloader(comicList4, path8, namae4, txtLog, "4번 Thread");
-
-				Thread t1 = new Thread(d1);
-				Thread t2 = new Thread(d2);
-				Thread t3 = new Thread(d3);
-				Thread t4 = new Thread(d4);
-
-				t1.start();
-				t2.start();
-				t3.start();
-				t4.start();
+//				downloader d1 = new downloader(comicList1, path5, namae1, txtLog, "1번 Thread");
+//				downloader d2 = new downloader(comicList2, path6, namae2, txtLog, "2번 Thread");
+//				downloader d3 = new downloader(comicList3, path7, namae3, txtLog, "3번 Thread");
+//				downloader d4 = new downloader(comicList4, path8, namae4, txtLog, "4번 Thread");
+//
+//				Thread t1 = new Thread(d1);
+//				Thread t2 = new Thread(d2);
+//				Thread t3 = new Thread(d3);
+//				Thread t4 = new Thread(d4);
+//
+//				t1.start();
+//				t2.start();
+//				t3.start();
+//				t4.start();
 
 			} catch (IOException e2) {
 				System.out.println(e2.getMessage());
