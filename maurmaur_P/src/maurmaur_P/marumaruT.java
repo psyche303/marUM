@@ -37,21 +37,41 @@ import java.util.*;
 public class marumaruT extends JFrame {
 	private Object textLog;
 	Font font = new Font("돋움", Font.BOLD, 18);
-	List<String> comicList1 = new ArrayList<String>();
-	List<String> comicList2 = new ArrayList<String>();
-	List<String> comicList3 = new ArrayList<String>();
-	List<String> comicList4 = new ArrayList<String>();
-	List<String> comicList5 = new ArrayList<String>();
-	List<String> namae1 = new ArrayList<String>();
-	List<String> namae2 = new ArrayList<String>();
-	List<String> namae3 = new ArrayList<String>();
-	List<String> namae4 = new ArrayList<String>();
-	List<String> namae5 = new ArrayList<String>();
-	List<String> path5 = new ArrayList<String>();
-	List<String> path6 = new ArrayList<String>();
-	List<String> path7 = new ArrayList<String>();
-	List<String> path8 = new ArrayList<String>();
-	List<String> path9 = new ArrayList<String>();
+	ArrayList<String> comicList1 = new ArrayList<String>();
+	ArrayList<String> comicList2 = new ArrayList<String>();
+	ArrayList<String> comicList3 = new ArrayList<String>();
+	ArrayList<String> comicList4 = new ArrayList<String>();
+	ArrayList<String> comicList5 = new ArrayList<String>();
+	ArrayList<String> namae1 = new ArrayList<String>();
+	ArrayList<String> namae2 = new ArrayList<String>();
+	ArrayList<String> namae3 = new ArrayList<String>();
+	ArrayList<String> namae4 = new ArrayList<String>();
+	ArrayList<String> namae5 = new ArrayList<String>();
+	ArrayList<String> path5 = new ArrayList<String>();
+	ArrayList<String> path6 = new ArrayList<String>();
+	ArrayList<String> path7 = new ArrayList<String>();
+	ArrayList<String> path8 = new ArrayList<String>();
+	ArrayList<String> path9 = new ArrayList<String>();
+	ArrayList<ArrayList<String>> listList = new ArrayList<ArrayList<String>>() {
+		{
+			add(comicList1);
+			add(comicList2);
+			add(comicList3);
+			add(comicList4);
+			add(comicList5);
+			add(namae1);
+			add(namae2);
+			add(namae3);
+			add(namae4);
+			add(namae5);
+			add(path5);
+			add(path6);
+			add(path7);
+			add(path8);
+			add(path9);
+		}
+	};
+
 	int listNum = 0;
 	String path2, namae;
 
@@ -106,6 +126,9 @@ public class marumaruT extends JFrame {
 		setVisible(true);
 
 		ActionListener listener = e -> {
+			for (int q = 0; q < listList.size(); q++) {
+				listList.get(q).clear();
+			}
 			// 저장위치에 폴더가 없으면 만드는 매서드
 			String path = saveLocation.getText();
 			File file = new File(path);
@@ -162,25 +185,34 @@ public class marumaruT extends JFrame {
 				System.out.println("comicList3 = " + comicList3);
 				System.out.println("comicList4 = " + comicList4);
 				System.out.println("comicList5 = " + comicList5);
-				
-				test test1 = new test(comicList5, path9, namae5, txtLog, "test Thread");
-				Thread t5 = new Thread(test1);
-				t5.start();				
 
-//				downloader d1 = new downloader(comicList1, path5, namae1, txtLog, "1번 Thread");
-//				downloader d2 = new downloader(comicList2, path6, namae2, txtLog, "2번 Thread");
-//				downloader d3 = new downloader(comicList3, path7, namae3, txtLog, "3번 Thread");
-//				downloader d4 = new downloader(comicList4, path8, namae4, txtLog, "4번 Thread");
-//
-//				Thread t1 = new Thread(d1);
-//				Thread t2 = new Thread(d2);
-//				Thread t3 = new Thread(d3);
-//				Thread t4 = new Thread(d4);
-//
-//				t1.start();
-//				t2.start();
-//				t3.start();
-//				t4.start();
+				confirmPassword confirmPwClass = new confirmPassword(comicList5);
+				String confirmPw = confirmPwClass.confirmPW;
+				System.out.println(confirmPw);
+
+				switch (confirmPw) {
+				case "be":
+					downloader17 test1 = new downloader17(comicList5, path9, namae5, txtLog, "test Thread");
+					Thread t5 = new Thread(test1);
+					t5.start();
+					break;
+				case "not":
+					downloader d1 = new downloader(comicList1, path5, namae1, txtLog, "1번 Thread");
+					downloader d2 = new downloader(comicList2, path6, namae2, txtLog, "2번 Thread");
+					downloader d3 = new downloader(comicList3, path7, namae3, txtLog, "3번 Thread");
+					downloader d4 = new downloader(comicList4, path8, namae4, txtLog, "4번 Thread");
+
+					Thread t1 = new Thread(d1);
+					Thread t2 = new Thread(d2);
+					Thread t3 = new Thread(d3);
+					Thread t4 = new Thread(d4);
+
+					t1.start();
+					t2.start();
+					t3.start();
+					t4.start();
+					break;
+				}
 
 			} catch (IOException e2) {
 				System.out.println(e2.getMessage());
