@@ -4,29 +4,16 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 
-import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import javax.imageio.ImageIO;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -35,7 +22,6 @@ import org.jsoup.select.Elements;
 import java.util.*;
 
 public class marumaruT extends JFrame {
-	private Object textLog;
 	Font font = new Font("돋움", Font.BOLD, 18);
 	ArrayList<String> comicList1 = new ArrayList<String>();
 	ArrayList<String> comicList2 = new ArrayList<String>();
@@ -76,7 +62,7 @@ public class marumaruT extends JFrame {
 	String path2, namae;
 
 	marumaruT() {
-		setTitle("MaruMaru Downloader 1.4");
+		setTitle("Comic Catcher 1.00");
 
 		Container c = getContentPane();
 		c.setLayout(null);
@@ -135,25 +121,24 @@ public class marumaruT extends JFrame {
 			if (!file.exists()) {
 				file.mkdirs();
 			}
-			try { // 큰try // 여러 권 처리하는 IF
-				Document doc = Jsoup.connect(url.getText()).get();
-				Element element = doc.select("div.content").get(0);
-				Elements N = element.select("a");
 
-				for (Element e1 : N) { // for문
-					String url2 = e1.getElementsByAttribute("href").attr("href");
-					namae = e1.text();
+			if (url.getText().contains("zangsisi.net")) {
+				try { // 큰try // 여러 권 처리하는 IF
+					Document doc = Jsoup.connect(url.getText()).get();
+					Element element = doc.select("div#post").get(0);
+					Elements N = element.select("a.tx-link");
 
-					if (url2.contains("http://")) { // "a"에서 만화의 링크를 골라내는 if
+					for (Element e1 : N) { // for문
+						String url2 = e1.getElementsByAttribute("href").attr("href"); // 하부링크
+						namae = e1.text();
+						System.out.println("url2 : " + url2);
+						System.out.println("namae : " + namae);
 
 						path2 = path + "\\" + namae;
 						File file2 = new File(path2);
 						if (!file2.exists()) {
 							file2.mkdirs();
 						}
-						comicList5.add(url2);
-						namae5.add(namae);
-						path9.add(path2);
 						if (listNum % 4 == 0) {
 							comicList1.add(url2);
 							namae1.add(namae);
@@ -176,47 +161,109 @@ public class marumaruT extends JFrame {
 							listNum++;
 						}
 
-					} // if_A
+					}
 
-				} // for문
+					downloaderZS zSS1 = new downloaderZS(comicList1, path5, namae1, txtLog, "1번 Thread");
+					downloaderZS zSS2 = new downloaderZS(comicList2, path6, namae2, txtLog, "2번 Thread");
+					downloaderZS zSS3 = new downloaderZS(comicList3, path7, namae3, txtLog, "3번 Thread");
+					downloaderZS zSS4 = new downloaderZS(comicList4, path8, namae4, txtLog, "4번 Thread");
+					Thread t6 = new Thread(zSS1);
+					Thread t7 = new Thread(zSS2);
+					Thread t8 = new Thread(zSS3);
+					Thread t9 = new Thread(zSS4);
 
-				System.out.println("comicList1 = " + comicList1);
-				System.out.println("comicList2 = " + comicList2);
-				System.out.println("comicList3 = " + comicList3);
-				System.out.println("comicList4 = " + comicList4);
-				System.out.println("comicList5 = " + comicList5);
-
-				confirmPassword confirmPwClass = new confirmPassword(comicList5);
-				String confirmPw = confirmPwClass.confirmPW;
-				System.out.println(confirmPw);
-
-				switch (confirmPw) {
-				case "be":
-					downloader17 test1 = new downloader17(comicList5, path9, namae5, txtLog, "test Thread");
-					Thread t5 = new Thread(test1);
-					t5.start();
-					break;
-				case "not":
-					downloader d1 = new downloader(comicList1, path5, namae1, txtLog, "1번 Thread");
-					downloader d2 = new downloader(comicList2, path6, namae2, txtLog, "2번 Thread");
-					downloader d3 = new downloader(comicList3, path7, namae3, txtLog, "3번 Thread");
-					downloader d4 = new downloader(comicList4, path8, namae4, txtLog, "4번 Thread");
-
-					Thread t1 = new Thread(d1);
-					Thread t2 = new Thread(d2);
-					Thread t3 = new Thread(d3);
-					Thread t4 = new Thread(d4);
-
-					t1.start();
-					t2.start();
-					t3.start();
-					t4.start();
-					break;
+					t6.start();
+					t7.start();
+					t8.start();
+					t9.start();
+				} catch (Exception ez) {
+					ez.printStackTrace();
 				}
 
-			} catch (IOException e2) {
-				System.out.println(e2.getMessage());
-				txtLog.append(e2.getMessage() + "\n");
+			} else {
+				try { // 큰try // 여러 권 처리하는 IF
+					Document doc = Jsoup.connect(url.getText()).get();
+					Element element = doc.select("div.content").get(0);
+					Elements N = element.select("a");
+
+					for (Element e1 : N) { // for문
+						String url2 = e1.getElementsByAttribute("href").attr("href");
+						namae = e1.text();
+
+						if (url2.contains("http://")) { // "a"에서 만화의 링크를 골라내는 if
+
+							path2 = path + "\\" + namae;
+							File file2 = new File(path2);
+							if (!file2.exists()) {
+								file2.mkdirs();
+							}
+							comicList5.add(url2);
+							namae5.add(namae);
+							path9.add(path2);
+							if (listNum % 4 == 0) {
+								comicList1.add(url2);
+								namae1.add(namae);
+								path5.add(path2);
+								listNum++;
+							} else if (listNum % 4 == 1) {
+								comicList2.add(url2);
+								namae2.add(namae);
+								path6.add(path2);
+								listNum++;
+							} else if (listNum % 4 == 2) {
+								comicList3.add(url2);
+								namae3.add(namae);
+								path7.add(path2);
+								listNum++;
+							} else if (listNum % 4 == 3) {
+								comicList4.add(url2);
+								namae4.add(namae);
+								path8.add(path2);
+								listNum++;
+							}
+
+						} // if_A
+
+					} // for문
+
+					System.out.println("comicList1 = " + comicList1);
+					System.out.println("comicList2 = " + comicList2);
+					System.out.println("comicList3 = " + comicList3);
+					System.out.println("comicList4 = " + comicList4);
+					System.out.println("comicList5 = " + comicList5);
+
+					confirmPassword confirmPwClass = new confirmPassword(comicList5);
+					String confirmPw = confirmPwClass.confirmPW;
+					System.out.println(confirmPw);
+
+					switch (confirmPw) {
+					case "be":
+						downloader17 test1 = new downloader17(comicList5, path9, namae5, txtLog, "5번 Thread");
+						Thread t5 = new Thread(test1);
+						t5.start();
+						break;
+					case "not":
+						downloader d1 = new downloader(comicList1, path5, namae1, txtLog, "1번 Thread");
+						downloader d2 = new downloader(comicList2, path6, namae2, txtLog, "2번 Thread");
+						downloader d3 = new downloader(comicList3, path7, namae3, txtLog, "3번 Thread");
+						downloader d4 = new downloader(comicList4, path8, namae4, txtLog, "4번 Thread");
+
+						Thread t1 = new Thread(d1);
+						Thread t2 = new Thread(d2);
+						Thread t3 = new Thread(d3);
+						Thread t4 = new Thread(d4);
+
+						t1.start();
+						t2.start();
+						t3.start();
+						t4.start();
+						break;
+					}
+
+				} catch (IOException e2) {
+					System.out.println(e2.getMessage());
+					txtLog.append(e2.getMessage() + "\n");
+				}
 			}
 
 		};

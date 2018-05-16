@@ -8,8 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import java.util.*;
+import java.util.ArrayList;
 
 import javax.swing.JTextArea;
 
@@ -18,7 +17,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class downloader implements Runnable {
+public class downloaderZS implements Runnable {
 	String ThreadName;
 	ArrayList<String> comicList = new ArrayList<String>();
 	ArrayList<String> path = new ArrayList<String>();
@@ -27,7 +26,7 @@ public class downloader implements Runnable {
 	String format, confirm;
 	File f;
 
-	downloader(ArrayList<String> comicList, ArrayList<String> path, ArrayList<String> namae, JTextArea txtLog,
+	downloaderZS(ArrayList<String> comicList, ArrayList<String> path, ArrayList<String> namae, JTextArea txtLog,
 			String ThreadName) {
 		this.comicList = comicList;
 		this.path = path;
@@ -42,15 +41,12 @@ public class downloader implements Runnable {
 		for (int i = 0; i < comicList.size(); i++) {
 			try {// 한 권의 img를 저장하는 try
 				Document doc2 = Jsoup.connect(comicList.get(i)).get();
-				Element element2 = doc2.select("div.article-gallery").get(0);
+				Element element2 = doc2.select("div#post").get(0);
 				Elements img = element2.select("img");
 				int fileNum = 1;
 				for (Element e2 : img) {
-
-					String url3 = "http://wasabisyrup.com" + e2.getElementsByAttribute("src").attr("data-src");
-					url3 = url3.replace(" copy", "%20copy");
+					String url3 = e2.getElementsByAttribute("src").attr("src");
 					URL imgUrl = new URL(url3);
-
 					if (url3.contains(".jpg")) {
 						format = ".jpg";
 					} else if (url3.contains(".jpeg")) {
@@ -66,7 +62,10 @@ public class downloader implements Runnable {
 					f = new File(confirm);
 					if (f.exists()) {
 						System.out.println(confirm + "은 이미 존재해서 넘어감");
+						fileNum++;
+						continue;
 					}
+
 					// 이미지 다운로드
 					else {
 						HttpURLConnection conn = (HttpURLConnection) imgUrl.openConnection();

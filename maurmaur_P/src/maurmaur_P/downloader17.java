@@ -4,7 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -13,14 +12,9 @@ import java.util.*;
 
 import javax.swing.JTextArea;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -28,7 +22,6 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class downloader17 implements Runnable {
-	private Object textLog;
 	String ThreadName, confirm, finImgSrc, cImgSrc;
 	ArrayList<String> comicList = new ArrayList<String>();
 	ArrayList<String> path = new ArrayList<String>();
@@ -170,6 +163,8 @@ public class downloader17 implements Runnable {
 					is.close();
 					fileNum++;
 				}
+				txtLog.append(namae.get(0) + " 저장완료\n");
+				txtLog.setCaretPosition(txtLog.getDocument().getLength());
 
 			} catch (Exception e2) {
 				e2.printStackTrace();
@@ -190,7 +185,6 @@ public class downloader17 implements Runnable {
 				nextB.click();
 				System.out.println("클릭");
 
-				// WebElement sElement2 = driver.findElement(By.id("gallery_vertical"));
 				WebElement sElementWait = (new WebDriverWait(driver, 10)).until(new ExpectedCondition<WebElement>() {
 					public WebElement apply(WebDriver d) {
 						return d.findElement(By.id("gallery_vertical"));
@@ -282,6 +276,8 @@ public class downloader17 implements Runnable {
 						is.close();
 						fileNum++;
 					}
+					txtLog.append(namae.get(h) + " 저장완료\n");
+					txtLog.setCaretPosition(txtLog.getDocument().getLength());
 
 				} catch (Exception e2) {
 					e2.printStackTrace();
@@ -295,6 +291,8 @@ public class downloader17 implements Runnable {
 
 			driver.quit();
 			System.out.println("driver 종료");
+			txtLog.append("작업종료");
+			txtLog.setCaretPosition(txtLog.getDocument().getLength());
 
 		} catch (Exception e1) {
 			e1.printStackTrace();
