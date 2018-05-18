@@ -37,16 +37,22 @@ public class downloaderZS implements Runnable {
 
 	@Override
 	public void run() {
+//		작업에 소요되는 시간 측정
 		long start = System.currentTimeMillis();
 		for (int i = 0; i < comicList.size(); i++) {
-			try {// 한 권의 img를 저장하는 try
+			try {
+//				링크에서 이미지 소스를 읽기
 				Document doc2 = Jsoup.connect(comicList.get(i)).get();
 				Element element2 = doc2.select("div#post").get(0);
 				Elements img = element2.select("img");
+//				파일 저장명에 부여될 번호
 				int fileNum = 1;
 				for (Element e2 : img) {
+//					읽어낸 url을 String으로 변환
 					String url3 = e2.getElementsByAttribute("src").attr("src");
+//					url을 URL로 변환
 					URL imgUrl = new URL(url3);
+//					이미지 포멧에 따라 저장될 이미지의 확장자 설정
 					if (url3.contains(".jpg")) {
 						format = ".jpg";
 					} else if (url3.contains(".jpeg")) {
@@ -61,7 +67,6 @@ public class downloaderZS implements Runnable {
 					confirm = path.get(i) + "\\" + namae.get(i) + "_" + fileNum + format;
 					f = new File(confirm);
 					if (f.exists()) {
-						System.out.println(confirm + "은 이미 존재해서 넘어감");
 						fileNum++;
 						continue;
 					}
@@ -70,22 +75,18 @@ public class downloaderZS implements Runnable {
 					else {
 						HttpURLConnection conn = (HttpURLConnection) imgUrl.openConnection();
 						conn.addRequestProperty("User-Agent", "Mozilla/4.76");
-						System.out.println(conn.getContentLength());
-
+//						System.out.println(conn.getContentLength()); 문제가 생기면 음수 반환
 						InputStream is = conn.getInputStream();
 						BufferedInputStream bis = new BufferedInputStream(is);
 						FileOutputStream os = new FileOutputStream(
 								path.get(i) + "\\" + namae.get(i) + "_" + fileNum + format);
-
 						BufferedOutputStream bos = new BufferedOutputStream(os);
 						int byteImg;
-
-						// byte[] buf = new byte[conn.getContentLength()]; // 범위오류 때문에 1024byte단위로 읽게
-						// 수정.
 						byte[] buf = new byte[1024];
 						while ((byteImg = bis.read(buf)) != -1) {
 							bos.write(buf, 0, byteImg);
 						}
+//						각 이미지가 다운됐을 때 메인UI에 메시지 출력
 						txtLog.append(namae.get(i) + "_" + fileNum + " 저장완료" + "  src : " + imgUrl + "\n");
 						txtLog.setCaretPosition(txtLog.getDocument().getLength());
 						fileNum += 1;
@@ -94,21 +95,18 @@ public class downloaderZS implements Runnable {
 						bis.close();
 						is.close();
 					}
-
 				}
+//				각 권(각 화)이(가) 다운완료 됐을 때 메인UI에 메시지 출력
 				txtLog.append(namae.get(i) + " 저장완료\n");
 				txtLog.setCaretPosition(txtLog.getDocument().getLength());
-
 			} catch (IOException e2) {
 				System.out.println(e2.getMessage());
 				txtLog.append(e2.getMessage() + "\n");
 			}
 		}
-
+//		Thread에 할당된 모든 이미지를 다운받고 소요된 총 시간을 메인UI에 출력
 		long end = System.currentTimeMillis();
 		txtLog.append(ThreadName + " is Done ____ " + "실행 시간 : " + (end - start) / 1000.0 + "초\n");
 		txtLog.setCaretPosition(txtLog.getDocument().getLength());
-
 	}
-
 }

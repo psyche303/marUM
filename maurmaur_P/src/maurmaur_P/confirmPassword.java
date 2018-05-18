@@ -32,22 +32,18 @@ public class confirmPassword {
 	confirmPassword(List<String> comicList) {
 		this.comicList = comicList;
 		try {
+			// 받아온 링크 중 첫 번째 페이지에서 Password를 입력하는 곳이 있는지 확인. 있다면 be, 없다면 not으로 confirmPW 수정.
 			Document doc = Jsoup.connect(comicList.get(0)).get();
 			try {
 				Element element = doc.select("input").get(0);
-				System.out.println("비번 있음");
 				confirmPW = "be";
 
 			} catch (Exception e2) {
-				System.out.println("비번 없음");
 				confirmPW = "not";
 				e2.printStackTrace();
-
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
-
 }
